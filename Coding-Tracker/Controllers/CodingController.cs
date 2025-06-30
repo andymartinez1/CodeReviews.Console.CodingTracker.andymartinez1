@@ -39,7 +39,6 @@ internal class CodingController
         session.ProjectName = AnsiConsole.Ask<string>("Enter the project name:");
         session.StartTime = dates[0];
         session.EndTime = dates[1];
-        var sessionDuration = session.Duration;
 
         data.UpdateSession(session);
     }
@@ -79,7 +78,6 @@ internal class CodingController
                 EndTime = endTime,
             };
 
-            var sessionDuration = session.Duration;
             sessions.Add(session);
             currentDate = currentDate.AddDays(1);
         }
