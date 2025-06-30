@@ -476,5 +476,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-/MathGame2
-/CodingTracker.TomDonegan/TextFile1.txt
+
+#Database files
+coding_sessions.db

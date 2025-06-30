@@ -3,6 +3,6 @@ using Coding_Tracker.UI;
 
 var data = new DataConnection();
 
-data.CreateDatabase();
+DataConnection.CreateDatabase();
 
 Menu.MainMenu();
