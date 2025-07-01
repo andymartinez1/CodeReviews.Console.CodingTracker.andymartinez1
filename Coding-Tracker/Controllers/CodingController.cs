@@ -1,4 +1,5 @@
-﻿using Coding_Tracker.Data;
+﻿using System.Globalization;
+using Coding_Tracker.Data;
 using Coding_Tracker.Models;
 using Coding_Tracker.Services;
 using Coding_Tracker.UI;
@@ -50,13 +51,54 @@ internal class CodingController
 
         var sessionId = GetSessionId();
 
-        AnsiConsole.WriteLine("Session deleted successfully!");
+        AnsiConsole.MarkupLine("[Green]Session deleted successfully![/]");
         data.DeleteSession(sessionId);
     }
 
     internal static DateTime[] GetDates()
     {
-        return Validation.ValidateDateTime();
+        var startDateInput = AnsiConsole.Ask<string>(
+            "Enter the start date and time (yyyy-MM-dd HH:mm):"
+        );
+
+        while (Validation.IsValidDate(startDateInput, "yyyy-MM-dd HH:mm") == false)
+            startDateInput = AnsiConsole.Ask<string>(
+                "\n[Red]Invalid date. Format: yyyy-MM-dd HH:mm. Please try again:[/]\n"
+            );
+
+        var endDateInput = AnsiConsole.Ask<string>(
+            "Enter the end date and time (yyyy-MM-dd HH:mm):"
+        );
+
+        while (Validation.IsValidDate(endDateInput, "yyyy-MM-dd HH:mm") == false)
+            endDateInput = AnsiConsole.Ask<string>(
+                "\n[Red]Invalid date. Format: yyyy-MM-dd HH:mm. Please try again:[/]\n"
+            );
+
+        while (Validation.IsStartDateBeforeEndDate(startDateInput, endDateInput) == false)
+        {
+            AnsiConsole.MarkupLine(
+                "\n[Red]Start date must be before end date. Please try again:[/]"
+            );
+            startDateInput = AnsiConsole.Ask<string>(
+                "Enter the start date and time (yyyy-MM-dd HH:mm):"
+            );
+            endDateInput = AnsiConsole.Ask<string>(
+                "Enter the end date and time (yyyy-MM-dd HH:mm):"
+            );
+        }
+
+        var startDate = DateTime.ParseExact(
+            startDateInput,
+            "yyyy-MM-dd HH:mm",
+            CultureInfo.InvariantCulture
+        );
+        var endDate = DateTime.ParseExact(
+            endDateInput,
+            "yyyy-MM-dd HH:mm",
+            CultureInfo.InvariantCulture
+        );
+        return [startDate, endDate];
     }
 
     internal static void SeedSessions(int count)
